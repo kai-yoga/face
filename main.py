@@ -1,7 +1,7 @@
 import getconfig
 import face
 import zipzp
-
+import time
 if __name__ == "__main__":
     config = getconfig.getConfig()
     # face.main(config)
@@ -16,3 +16,4 @@ if __name__ == "__main__":
         print('压缩成功')
     except:
         print('压缩失败')
+    time.sleep(20)
