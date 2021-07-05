@@ -2,6 +2,7 @@ import os
 import zipfile
 from datetime import datetime
 
+
 def getFiles(file_path, file_type_list):
     '''Generator
     yield filename'''
@@ -12,32 +13,34 @@ def getFiles(file_path, file_type_list):
         } if file.split('.')[-1] in file_type_list else None
 
 
-def genZip(file_path, save_path, max_count, max_storage):
+def genZip(file_path, save_path, max_count, max_storage, file_type_list):
     '''生成zip文件'''
     index = 1
     sumsize = 0
     count = 0
     global_count = 0
     L = []
-    for file in getFiles(file_path):
+    for file in getFiles(file_path, file_type_list):
         if file:
             global_count = global_count + 1
             if sumsize + file['size'] < max_storage * 1024 * 1024 and count < max_count:
                 zipfile.ZipFile(os.path.join(save_path, str(index) + '.zip'),
-                    mode='a',
-                    compression=zipfile.ZIP_BZIP2).write(file['name'])
+                                mode='a',
+                                compression=zipfile.ZIP_BZIP2).write(os.path.join(file_path, file['name']))
                 count = count + 1
                 sumsize = sumsize + file['size']
             else:
-                L.append('{},已经生成完成，大小=>{},文件数量=>{}'.format(os.path.join(save_path, str(index) + '.zip'), str(round(sumsize / 1024)) + 'K', str(count)))
+                L.append('{},已经生成完成，大小=>{},文件数量=>{}'.format(os.path.join(save_path, str(index) + '.zip'),
+                                                            str(round(sumsize / 1024)) + 'K', str(count)))
                 index = index + 1
                 zipfile.ZipFile(os.path.join(save_path, str(index) + '.zip'),
-                    mode='a',
-                    compression=zipfile.ZIP_BZIP2).write(file['name'])
+                                mode='a',
+                                compression=zipfile.ZIP_BZIP2).write(os.path.join(file_path, file['name']))
                 count = 1
                 sumsize = file['size']
     if os.path.exists(os.path.join(save_path, str(index) + '.zip')):
-        L.append('{},已经生成完成，大小=>{},文件数量=>{}'.format(os.path.join(save_path, str(index) + '.zip'), str(round(sumsize / 1024)) + 'K', str(count)))
+        L.append('{},已经生成完成，大小=>{},文件数量=>{}'.format(os.path.join(save_path, str(index) + '.zip'),
+                                                    str(round(sumsize / 1024)) + 'K', str(count)))
     return L
 
 
@@ -47,6 +50,7 @@ def init(save_path):
         if file.split('.') == '.zip':
             os.remove(os.path.join(save_path, file))
     return 1
+
 
 def main(config):
     '''主函数'''
@@ -59,11 +63,8 @@ def main(config):
         max_storage = float(config["max_storage"])
         if init(save_path):
             print('{}路径中的压缩文件已经清空完毕'.format(save_path))
-        L = genZip(file_path,save_path,max_count=max_count,max_storage=max_storage)
-        with open(os.path.join(save_path,'zip_res' + datetime.now().strftime('%Y-%m-%d %H%M%S') + '.txt'),'w',encoding='utf8') as f:
+        L = genZip(file_path, save_path, max_count=max_count, max_storage=max_storage, file_type_list=save_file_suffix)
+        with open(os.path.join(save_path, 'zip_res' + datetime.now().strftime('%Y-%m-%d %H%M%S') + '.txt'), 'w',
+                  encoding='utf8') as f:
             f.write('\n'.join(L))
         f.close()
-
-
-
-
