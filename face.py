@@ -75,10 +75,8 @@ def getSimilar(lib_file, other_file):
     lib_encoding = face_recognition.face_encodings(lib_face)[0]
     other_face = face_recognition.load_image_file(other_file)
     other_encoding = face_recognition.face_encodings(other_face)[0]
-    similar = 1 - face_recognition.face_distance(
-        [lib_encoding],
-        other_encoding
-    )[0]
+    similar = 1 - face_recognition.face_distance([lib_encoding],
+        other_encoding)[0]
     return round(similar, 4)
 
 
@@ -131,28 +129,30 @@ def main(config):
     config = config["bdzp"]
     compare = config["compare"]
     libs = config["libs"]
-    res = [('比较', '基础', '相似度', '比较照片', '基础照片')]
-    for others in config["others"]:
-        to_convert = getToConvert(libs, others)
-        convert_file = None
-        if to_convert != (0, 0):
-            convert_file = getConvertFile(others["convert_file_path"])
-        for file in getOthers(others["path"]):
-            lib_file = getLibFileName(convert_file, file, to_convert)
-            other_file = os.path.join(others["path"], file)
-            similar = 0
-            if os.path.exists(os.path.join(libs["path"], lib_file)):  ###lib_file中不存在对应的文件
-                lib_file = os.path.join(libs["path"], lib_file)
-                if lib_file.split('.')[-1] in compare["suffix"] and other_file.split('.')[-1] in compare["suffix"]:
-                    similar = getSimilar(lib_file, other_file)
-            else:
-                lib_file = '不存在'
-                # similar = 0
-            if similar < float(others["similar"]):
-                res.append((other_file, lib_file, str(similar)))
-    res_file_name = os.path.join(compare["save_path"],
-                                 datetime.now().strftime('%Y-%m-%d %H%M%S') + '.' + compare["outputFileType"].lower())
-    expxlsx(res_file_name, res, compare["outputFileType"].lower())
+    if libs["path"] and libs["file_key"]:
+        res = [('比较', '基础', '相似度', '比较照片', '基础照片')]
+        for others in config["others"]:
+            if others["file_key"] and others["path"] and other["similar"]:
+                to_convert = getToConvert(libs, others)
+                convert_file = None
+                if to_convert != (0, 0):
+                    convert_file = getConvertFile(others["convert_file_path"])
+                for file in getOthers(others["path"]):
+                    lib_file = getLibFileName(convert_file, file, to_convert)
+                    other_file = os.path.join(others["path"], file)
+                    similar = 0
+                    if os.path.exists(os.path.join(libs["path"], lib_file)):  ###lib_file中不存在对应的文件
+                        lib_file = os.path.join(libs["path"], lib_file)
+                        if lib_file.split('.')[-1] in compare["suffix"] and other_file.split('.')[-1] in compare["suffix"]:
+                            similar = getSimilar(lib_file, other_file)
+                    else:
+                        lib_file = '不存在'
+                        # similar = 0
+                    if similar < float(others["similar"]):
+                        res.append((other_file, lib_file, str(similar)))
+            res_file_name = os.path.join(compare["save_path"],
+                                         datetime.now().strftime('%Y-%m-%d %H%M%S') + '.' + compare["outputFileType"].lower())
+            expxlsx(res_file_name, res, compare["outputFileType"].lower())
 
 
 # if __name__ == "__main__":
