@@ -2,7 +2,7 @@
   "bdzp": {
     "libs": {
       "file_key": "xh",
-      "path": ""
+      "path": "F:\\libs"
     },
     "compare": {
       "suffix": [
@@ -10,15 +10,15 @@
         "jpeg",
         "png"
       ],
-      "save_path": "",
+      "save_path": "F:\\",
       "outputFileType": "xlsx"
     },
     "others": [
       {
         "file_key": "xh",
-        "path": "C:\\Users\\80662\\Desktop\\others",
+        "path": "F:\\others",
         "convert_file_path": "",
-        "similar": "1"
+        "similar": "0.7"
       },
       {
         "file_key": "xh",
@@ -29,8 +29,8 @@
     ]
   },
   "zip": {
-    "file_path": "F:\\考生照片广东",
-    "save_path": "F:\\考生照片广东",
+    "file_path": "",
+    "save_path": "",
     "save_file_suffix": [
       "jpg",
       "jpeg",

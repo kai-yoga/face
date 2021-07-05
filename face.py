@@ -4,7 +4,7 @@ import openpyxl as opl
 import face_recognition
 from datetime import datetime
 from openpyxl.drawing.image import Image
-import getconfig
+# import getconfig
 
 def getToConvert(libs, others):
     '''
@@ -132,12 +132,13 @@ def main(config):
     if libs["path"] and libs["file_key"]:
         res = [('比较', '基础', '相似度', '比较照片', '基础照片')]
         for others in config["others"]:
-            if others["file_key"] and others["path"] and other["similar"]:
+            if others["file_key"] and others["path"] and others["similar"]:
                 to_convert = getToConvert(libs, others)
                 convert_file = None
                 if to_convert != (0, 0):
                     convert_file = getConvertFile(others["convert_file_path"])
                 for file in getOthers(others["path"]):
+                    print('current {}'.format(os.path.join(others["path"],file)))
                     lib_file = getLibFileName(convert_file, file, to_convert)
                     other_file = os.path.join(others["path"], file)
                     similar = 0
