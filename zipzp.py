@@ -55,16 +55,17 @@ def init(save_path):
 def main(config):
     '''主函数'''
     config = config["zip"]
-    file_path = config["file_path"]
-    save_path = config["save_path"]
-    save_file_suffix = config["save_file_suffix"]
-    if file_path and save_path and save_file_suffix:
-        max_count = float(config["max_count"])
-        max_storage = float(config["max_storage"])
-        if init(save_path):
-            print('{}路径中的压缩文件已经清空完毕'.format(save_path))
-        L = genZip(file_path, save_path, max_count=max_count, max_storage=max_storage, file_type_list=save_file_suffix)
-        with open(os.path.join(save_path, 'zip_res' + datetime.now().strftime('%Y-%m-%d %H%M%S') + '.txt'), 'w',
-                  encoding='utf8') as f:
-            f.write('\n'.join(L))
-        f.close()
+    if config["open"] not in ["0"]:
+        file_path = config["file_path"]
+        save_path = config["save_path"]
+        save_file_suffix = config["save_file_suffix"]
+        if file_path and save_path and save_file_suffix:
+            max_count = float(config["max_count"])
+            max_storage = float(config["max_storage"])
+            if init(save_path):
+                print('{}路径中的压缩文件已经清空完毕'.format(save_path))
+            L = genZip(file_path, save_path, max_count=max_count, max_storage=max_storage, file_type_list=save_file_suffix)
+            with open(os.path.join(save_path, 'zip_res' + datetime.now().strftime('%Y-%m-%d %H%M%S') + '.txt'), 'w',
+                      encoding='utf8') as f:
+                f.write('\n'.join(L))
+            f.close()

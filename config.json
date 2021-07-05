@@ -1,5 +1,6 @@
 {
   "bdzp": {
+    "open":"0",
     "libs": {
       "file_key": "xh",
       "path": "F:\\libs"
@@ -29,6 +30,7 @@
     ]
   },
   "zip": {
+    "open":"0",
     "file_path": "",
     "save_path": "",
     "save_file_suffix": [
